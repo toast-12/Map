@@ -1,0 +1,131 @@
+/* 기본 스타일 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 기본 body 스타일 */
+body {
+    font-family: 'Arial', sans-serif;
+    height: 100vh;
+    overflow: hidden;
+    background: linear-gradient(45deg, #4CAF50, #81C784);
+}
+
+/* 지도 스타일 */
+#map {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+}
+
+/* 폼 컨테이너 */
+.form-container {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+    padding: 20px;
+    background-color: #0f0f0f;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    transform: rotateX(5deg) rotateY(5deg);
+    transition: transform 0.3s ease;
+}
+
+/* 폼 입력창 스타일 */
+.input-container {
+    display: flex;
+    flex-direction: column;
+}
+
+input, button {
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+input:focus, button:focus {
+    outline: none;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+input {
+    background: #f1f1f1;
+}
+
+button {
+    background: #005aeb;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+}
+
+button:hover {
+    background-color: #002157;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+/* 제목 스타일 */
+h1 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 0; /* margin-top 추가 */
+}
+
+/* 3D 효과 추가 */
+.form-container:hover {
+    transform: rotateX(0deg) rotateY(0deg);
+}
+
+/* 마커에 대한 스타일 */
+/* 기본 마커 스타일 */
+.leaflet-div-icon {
+    background-color: transparent !important;
+    border-radius: 50% !important;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 20px;
+    width: 24px;
+    height: 24px;
+}
+
+/* Start 마커 (미니멀한 파랑색) */
+.start-marker {
+    background-color: #007bff;  /* 파란색 */
+}
+
+/* End 마커 (미니멀한 파랑색, 다소 어두운 색상) */
+.end-marker {
+    background-color: #0056b3;  /* 다소 어두운 파랑색 */
+  width: 10px;
+  height: 10px;
+}
+
+
+#start {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+#end {
+    margin-top: 0;
+    margin-bottom: 10px; /* 오타 수정: margin-botoom → margin-bottom */
+}
