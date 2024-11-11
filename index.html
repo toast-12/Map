@@ -11,14 +11,21 @@
 </head>
 <body>
     <div id="map"></div>
+    
     <div class="form-container">
-        <h1 style="color: white;">길찾기 앱</h1>
+        <h1>길찾기 앱</h1>
         <div class="input-container">
             <label for="start">출발지:</label>
             <input type="text" id="start" placeholder="출발지 입력">
             <label for="end">도착지:</label>
             <input type="text" id="end" placeholder="도착지 입력">
-            <button  onclick="calculateRoute()">길찾기</button>
+            <button onclick="calculateRoute()">길찾기</button>
+        </div>
+        
+        <!-- 방향 지시 화면을 스크롤 가능하게 추가 -->
+        <div class="directions-container" id="directions">
+            <h2>길 안내</h2>
+            <ul id="directionsList"></ul>
         </div>
     </div>
 

@@ -66,8 +66,21 @@ function calculateRoute() {
                     L.latLng(endLatLng)
                 ],
                 createMarker: function() { return null; },
-                routeWhileDragging: true
+                routeWhileDragging: true,
+                show: false // 경로 안내 숨김
             }).addTo(map);
+
+            // 경로 지시사항 업데이트
+            routeControl.on('routesfound', function(e) {
+                const routes = e.routes[0].instructions;
+                const directionsList = document.getElementById('directionsList');
+                directionsList.innerHTML = '';
+                routes.forEach(step => {
+                    const li = document.createElement('li');
+                    li.innerText = step.text;
+                    directionsList.appendChild(li);
+                });
+            });
         });
     });
 }
