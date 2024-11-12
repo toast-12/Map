@@ -83,3 +83,21 @@ document.addEventListener('DOMContentLoaded', function() {
     initMap();
     document.getElementById('findRoute').addEventListener('click', calculateRoute);
 });
+
+function addDirectionText(text) {
+    const li = document.createElement('li');
+    
+    // 한글과 영문을 구분하여 스타일 적용
+    const koreanText = text.match(/[\uAC00-\uD7AF\u1100-\u11FF\u3130-\u318F]+/g);
+    const englishText = text.match(/[a-zA-Z]+/g);
+    
+    if (koreanText) {
+        text = text.replace(koreanText[0], `<span class="korean-text">${koreanText[0]}</span>`);
+    }
+    if (englishText) {
+        text = text.replace(englishText[0], `<span class="english-text">${englishText[0]}</span>`);
+    }
+    
+    li.innerHTML = text;
+    document.getElementById('directionsList').appendChild(li);
+}

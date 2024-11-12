@@ -132,3 +132,81 @@ h1 {
         font-size: 20px;
     }
 }
+
+/* 방향 안내 컨테이너 스타일링 */
+.directions-container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    padding: 15px;
+    max-width: 350px;
+    max-height: 70vh;
+    overflow-y: auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Malgun Gothic', sans-serif;
+}
+
+/* 방향 안내 리스트 스타일링 */
+#directionsList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#directionsList li {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+    line-height: 1.5;
+    font-size: 14px;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    /* 한글과 영문 텍스트 렌더링 최적화 */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+#directionsList li:last-child {
+    border-bottom: none;
+}
+
+/* 한글 텍스트 최적화 */
+.korean-text {
+    font-family: 'Malgun Gothic', -apple-system, sans-serif;
+}
+
+/* 영문 텍스트 최적화 */
+.english-text {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* 스크롤바 스타일링 */
+.directions-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.directions-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.directions-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+.directions-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* 모바일 최적화 */
+@media (max-width: 768px) {
+    .directions-container {
+        max-width: calc(100% - 20px);
+        margin: 10px;
+        font-size: 13px;
+    }
+
+    #directionsList li {
+        padding: 8px 0;
+    }
+}
