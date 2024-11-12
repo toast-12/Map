@@ -3,31 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D 길찾기 앱</title>
+    <title>길찾기 앱</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 </head>
 <body>
     <div id="map"></div>
     
-    <div class="form-container">
-        <h1>길찾기 앱</h1>
-        <div class="input-container">
-            <label for="start">출발지:</label>
-            <input type="text" id="start" placeholder="출발지 입력">
-            <label for="end">도착지:</label>
-            <input type="text" id="end" placeholder="도착지 입력">
-            <button id="findRoute">길찾기</button>
+    <div class="bottom-drawer">
+        <div class="drawer-handle">
+            <div class="handle-bar"></div>
+            <span class="handle-text">길찾기</span>
         </div>
-    </div>
-
-    <div class="directions-wrapper">
-        <div class="directions-container" id="directions">
-            <div class="mobile-handle">
-                <div class="handle-bar"></div>
+        <div class="drawer-content">
+            <div class="form-container">
+                <h1>길찾기 앱</h1>
+                <div class="input-container">
+                    <label for="start">출발지:</label>
+                    <input type="text" id="start" placeholder="출발지 입력">
+                    <label for="end">도착지:</label>
+                    <input type="text" id="end" placeholder="도착지 입력">
+                    <button id="findRoute">길찾기</button>
+                </div>
             </div>
-            <h2>길 안내</h2>
-            <ul id="directionsList"></ul>
+            <div class="directions-container" id="directions">
+                <h2>길 안내</h2>
+                <ul id="directionsList"></ul>
+            </div>
         </div>
     </div>
 
