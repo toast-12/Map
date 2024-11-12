@@ -1,82 +1,84 @@
-// 기존 맵 초기화 코드는 유지...
+let map, routeControl;
 
-function initializeDrawer() {
-    const drawer = document.querySelector('.bottom-drawer');
-    const handle = document.querySelector('.drawer-handle');
-    let startY = 0;
-    let startTransform = 0;
-    let isDragging = false;
-
-    handle.addEventListener('touchstart', handleTouchStart);
-    document.addEventListener('touchmove', handleTouchMove);
-    document.addEventListener('touchend', handleTouchEnd);
-    handle.addEventListener('click', toggleDrawer);
-
-    function handleTouchStart(e) {
-        isDragging = true;
-        startY = e.touches[0].clientY;
-        startTransform = getCurrentTranslateY();
-        drawer.classList.add('dragging');
-    }
-
-    function handleTouchMove(e) {
-        if (!isDragging) return;
-        
-        const deltaY = e.touches[0].clientY - startY;
-        const newTranslateY = Math.min(
-            Math.max(startTransform + deltaY, window.innerHeight * 0.1),
-            window.innerHeight - 50
-        );
-        
-        drawer.style.transform = `translateY(${newTranslateY}px)`;
-    }
-
-    function handleTouchEnd() {
-        if (!isDragging) return;
-        
-        isDragging = false;
-        drawer.classList.remove('dragging');
-        
-        const currentTranslateY = getCurrentTranslateY();
-        const threshold = window.innerHeight * 0.5;
-
-        if (currentTranslateY > threshold) {
-            // 드로어 닫기
-            drawer.style.transform = `translateY(${window.innerHeight - 50}px)`;
-            drawer.classList.remove('expanded');
-        } else {
-            // 드로어 열기
-            drawer.style.transform = `translateY(${window.innerHeight * 0.1}px)`;
-            drawer.classList.add('expanded');
-        }
-    }
-
-    function toggleDrawer() {
-        drawer.classList.toggle('expanded');
-        if (drawer.classList.contains('expanded')) {
-            drawer.style.transform = `translateY(${window.innerHeight * 0.1}px)`;
-        } else {
-            drawer.style.transform = `translateY(${window.innerHeight - 50}px)`;
-        }
-    }
-
-    function getCurrentTranslateY() {
-        const transform = window.getComputedStyle(drawer).transform;
-        if (transform === 'none') return 0;
-        const matrix = new DOMMatrix(transform);
-        return matrix.m42;
-    }
+function initMap() {
+    map = L.map('map').setView([37.5665, 126.9780], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
 }
 
-// 경로 찾기 결과를 표시할 때 드로어 열기
-function showDirections(routes) {
-    const drawer = document.querySelector('.bottom-drawer');
-    drawer.classList.add('expanded');
-    drawer.style.transform = `translateY(${window.innerHeight * 0.1}px)`;
+function calculateRoute() {
+    const start = document.getElementById('start').value;
+    const end = document.getElementById('end').value;
+
+    if (!start || !end) {
+        alert('출발지와 도착지를 입력해주세요.');
+        return;
+    }
+
+    const geocoder = L.Control.Geocoder.nominatim();
+
+    geocoder.geocode(start, function(startResults) {
+        if (startResults.length === 0) {
+            alert('출발지를 찾을 수 없습니다.');
+            return;
+        }
+        const startLatLng = startResults[0].center;
+
+        geocoder.geocode(end, function(endResults) {
+            if (endResults.length === 0) {
+                alert('도착지를 찾을 수 없습니다.');
+                return;
+            }
+            const endLatLng = endResults[0].center;
+
+            if (routeControl) {
+                map.removeControl(routeControl);
+            }
+
+            routeControl = L.Routing.control({
+                waypoints: [
+                    L.latLng(startLatLng.lat, startLatLng.lng),
+                    L.latLng(endLatLng.lat, endLatLng.lng)
+                ],
+                routeWhileDragging: true,
+                lineOptions: {
+                    styles: [{color: '#007bff', opacity: 0.8, weight: 5}]
+                }
+            }).addTo(map);
+
+            routeControl.on('routesfound', function(e) {
+                const routes = e.routes;
+                const summary = routes[0].summary;
+                const instructions = routes[0].instructions;
+
+                const directionsList = document.getElementById('directionsList');
+                directionsList.innerHTML = '';
+                instructions.forEach(function(instruction, index) {
+                    const li = document.createElement('li');
+                    li.textContent = `${index + 1}. ${instruction.text}`;
+                    directionsList.appendChild(li);
+                });
+
+                if (window.innerWidth <= 768) {
+                    document.querySelector('.content-wrapper').classList.add('expanded');
+                }
+            });
+        });
+    });
+}
+
+function initMobileHandle() {
+    const handle = document.querySelector('.mobile-handle');
+    const contentWrapper = document.querySelector('.content-wrapper');
+
+    handle.addEventListener('click', function() {
+        contentWrapper.classList.toggle('expanded');
+    });
 }
 
 document.addEventListener('DOMContentLoaded', function() {
     initMap();
-    initializeDrawer();
+    initMobileHandle();
     document.getElementById('findRoute').addEventListener('click', calculateRoute);
 });
