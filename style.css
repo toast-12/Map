@@ -5,7 +5,7 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Malgun Gothic', sans-serif;
+    font-family: 'Arial', sans-serif;
     height: 100vh;
     overflow: hidden;
     background: linear-gradient(45deg, #4CAF50, #81C784);
@@ -26,90 +26,131 @@ body {
     left: 20px;
     z-index: 10;
     padding: 20px;
-    background-color: rgba(255, 255, 255, 0.95);
+    background-color: rgba(255, 255, 255, 0.9);
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    width: 300px;
+    transition: transform 0.3s ease;
+    max-width: 300px;
 }
 
-/* PC 버전 방향 안내 */
-@media (min-width: 769px) {
-    .directions-wrapper {
-        position: absolute;
-        top: 240px; /* form-container 아래에 위치 */
-        left: 20px;
-        z-index: 10;
-        width: 300px;
-    }
-
-    .directions-container {
-        background-color: rgba(255, 255, 255, 0.95);
-        border-radius: 15px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        padding: 20px;
-        max-height: calc(100vh - 280px);
-        overflow-y: auto;
-    }
-
-    .mobile-handle {
-        display: none;
-    }
+.input-container {
+    display: flex;
+    flex-direction: column;
 }
 
-/* 모바일 버전 방향 안내 */
-@media (max-width: 768px) {
-    .form-container {
-        width: calc(100% - 40px);
-        max-width: none;
-    }
-
-    .directions-wrapper {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        z-index: 1000;
-        transition: transform 0.3s ease-out;
-    }
-
-    .directions-container {
-        background-color: rgba(255, 255, 255, 0.95);
-        border-radius: 20px 20px 0 0;
-        padding: 20px;
-        max-height: 70vh;
-        overflow-y: auto;
-    }
-
-    .mobile-handle {
-        width: 100%;
-        height: 24px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: grab;
-    }
-
-    .handle-bar {
-        width: 40px;
-        height: 4px;
-        background-color: #ccc;
-        border-radius: 2px;
-        margin-bottom: 15px;
-    }
-
-    .directions-wrapper.collapsed {
-        transform: translateY(calc(100% - 50px));
-    }
+input, button {
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
 }
 
-/* 공통 스타일 */
-.directions-container h2 {
-    margin-bottom: 15px;
+input:focus, button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 90, 235, 0.5);
+}
+
+button {
+    background: #005aeb;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    border: none;
+    transition: background-color 0.2s ease;
+}
+
+button:hover {
+    background-color: #0046b8;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+h1 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
     color: #333;
 }
 
+.directions-container {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    z-index: 10;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    max-width: 300px;
+    max-height: 50vh;
+    overflow-y: auto;
+    display: none;
+}
+
+.directions-container h2 {
+    margin-bottom: 10px;
+}
+
+#directionsList {
+    list-style-type: none;
+    padding: 0;
+}
+
+#directionsList li {
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.leaflet-routing-container {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .form-container {
+        top: 10px;
+        left: 10px;
+        right: 10px;
+        max-width: none;
+    }
+
+    .directions-container {
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+        max-width: none;
+    }
+
+    input, button {
+        font-size: 14px;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+}
+
+/* 방향 안내 컨테이너 스타일링 */
+.directions-container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    padding: 15px;
+    max-width: 350px;
+    max-height: 70vh;
+    overflow-y: auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Malgun Gothic', sans-serif;
+}
+
+/* 방향 안내 리스트 스타일링 */
 #directionsList {
     list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 #directionsList li {
@@ -117,11 +158,25 @@ body {
     border-bottom: 1px solid #eee;
     line-height: 1.5;
     font-size: 14px;
-    color: #333;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    /* 한글과 영문 텍스트 렌더링 최적화 */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 #directionsList li:last-child {
     border-bottom: none;
+}
+
+/* 한글 텍스트 최적화 */
+.korean-text {
+    font-family: 'Malgun Gothic', -apple-system, sans-serif;
+}
+
+/* 영문 텍스트 최적화 */
+.english-text {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 /* 스크롤바 스타일링 */
@@ -141,4 +196,17 @@ body {
 
 .directions-container::-webkit-scrollbar-thumb:hover {
     background: #555;
+}
+
+/* 모바일 최적화 */
+@media (max-width: 768px) {
+    .directions-container {
+        max-width: calc(100% - 20px);
+        margin: 10px;
+        font-size: 13px;
+    }
+
+    #directionsList li {
+        padding: 8px 0;
+    }
 }
