@@ -3,42 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D 길찾기 앱</title>
+    <title>길찾기 앱</title>
     <link rel="stylesheet" href="style.css">
-
-    <!-- Font Awesome 아이콘 CDN -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <div id="map"></div>
     
     <div class="form-container">
+        <div style="width: 100%; margin: 10px; background-color: rgb(255, 62, 62); color: white; border-radius: 10px;">현재 버전는 베타 버전으로, 불안정 할 수 있습니다.</div>
         <h1>길찾기 앱</h1>
         <div class="input-container">
             <label for="start">출발지:</label>
             <input type="text" id="start" placeholder="출발지 입력">
             <label for="end">도착지:</label>
             <input type="text" id="end" placeholder="도착지 입력">
-            <button onclick="calculateRoute()">길찾기</button>
+            <button onclick="calculateRoute()">
+                <i class="fas fa-route"></i> 길찾기
+            </button>
         </div>
         
-        <!-- 방향 지시 화면을 스크롤 가능하게 추가 -->
         <div class="directions-container" id="directions">
             <h2>길 안내</h2>
             <ul id="directionsList"></ul>
         </div>
     </div>
 
-    <!-- Leaflet.js 라이브러리 -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-
-    <!-- Leaflet Routing Machine -->
     <script src="https://unpkg.com/leaflet-routing-machine@3.2.5/dist/leaflet-routing-machine.js"></script>
-
-    <!-- Leaflet Control Geocoder -->
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-
     <script src="script.js"></script>
 </body>
 </html>

@@ -1,13 +1,21 @@
-// 지도 초기화
-let map = L.map('map').setView([37.5665, 126.9780], 13); // 서울을 기본으로 설정
+let map, routeControl, startMarker, endMarker;
 
-// OpenStreetMap 타일 레이어 추가
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
+function initMap() {
+    map = L.map('map').setView([37.5665, 126.9780], 13);
 
-let routeControl;
-let startMarker, endMarker;
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+}
+
+function createCustomIcon(color, text) {
+    return L.divIcon({
+        className: 'custom-icon',
+        html: `<div style="background-color: ${color}; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">${text}</div>`,
+        iconSize: [30, 30],
+        iconAnchor: [15, 15]
+    });
+}
 
 function calculateRoute() {
     const start = document.getElementById('start').value;
@@ -18,69 +26,60 @@ function calculateRoute() {
         return;
     }
 
-    // Leaflet의 Geocoder 사용하여 주소를 좌표로 변환
     const geocoder = L.Control.Geocoder.nominatim();
 
-    // 출발지 위치 검색
-    geocoder.geocode(start, function(results) {
-        if (!results || results.length === 0) {
+    geocoder.geocode(start, function(startResults) {
+        if (!startResults || startResults.length === 0) {
             alert('출발지 주소를 찾을 수 없습니다.');
             return;
         }
 
-        const startLatLng = results[0].center;
+        const startLatLng = startResults[0].center;
 
-        if (startMarker) startMarker.remove();
-        startMarker = L.marker(startLatLng, {
-            icon: L.divIcon({
-                className: 'start-marker',
-                html: '출발지'
-            })
-        }).addTo(map).bindPopup('출발지').openPopup();
+        if (startMarker) map.removeLayer(startMarker);
+        startMarker = L.marker(startLatLng, {icon: createCustomIcon('#4CAF50', '출')}).addTo(map);
 
-        // 도착지 위치 검색
-        geocoder.geocode(end, function(results) {
-            if (!results || results.length === 0) {
+        geocoder.geocode(end, function(endResults) {
+            if (!endResults || endResults.length === 0) {
                 alert('도착지 주소를 찾을 수 없습니다.');
                 return;
             }
 
-            const endLatLng = results[0].center;
+            const endLatLng = endResults[0].center;
 
-            if (endMarker) endMarker.remove();
-            endMarker = L.marker(endLatLng, {
-                icon: L.divIcon({
-                    className: 'end-marker',
-                    html: '도착지'
-                })
-            }).addTo(map).bindPopup('도착지').openPopup();
+            if (endMarker) map.removeLayer(endMarker);
+            endMarker = L.marker(endLatLng, {icon: createCustomIcon('#F44336', '도')}).addTo(map);
 
-            // 경로 계산
-            if (routeControl) {
-                map.removeControl(routeControl);
-            }
+            if (routeControl) map.removeControl(routeControl);
 
             routeControl = L.Routing.control({
                 waypoints: [
                     L.latLng(startLatLng),
                     L.latLng(endLatLng)
                 ],
-                createMarker: function() { return null; },
                 routeWhileDragging: true,
-                show: false // 경로 안내 숨김
+                addWaypoints: false,
+                draggableWaypoints: false,
+                fitSelectedRoutes: true,
+                showAlternatives: false
             }).addTo(map);
 
-            // 경로 지시사항 업데이트
             routeControl.on('routesfound', function(e) {
                 const routes = e.routes[0].instructions;
                 const directionsList = document.getElementById('directionsList');
                 directionsList.innerHTML = '';
-                routes.forEach(step => {
+                routes.forEach((step, index) => {
                     const li = document.createElement('li');
-                    li.innerText = step.text;
+                    li.textContent = `${index + 1}. ${step.text}`;
                     directionsList.appendChild(li);
                 });
+                document.getElementById('directions').style.display = 'block';
             });
         });
     });
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    initMap();
+    document.getElementById('findRoute').addEventListener('click', calculateRoute);
+});
