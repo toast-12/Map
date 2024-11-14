@@ -101,11 +101,15 @@ h1 {
 #directionsList {
     list-style-type: none;
     padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 #directionsList li {
     margin-bottom: 8px;
     font-size: 14px;
+    white-space: nowrap;
 }
 
 /* 모바일 최적화 */
@@ -146,7 +150,7 @@ h1 {
         margin: 0;
         display: flex;
         flex-direction: row;
-        justify-content: space-between;
+        justify-content: flex-start;  /* 왼쪽 정렬 */
         width: 100%;
         overflow-x: auto;
         font-size: 12px;
@@ -156,7 +160,6 @@ h1 {
         padding: 8px;
         white-space: nowrap;
         flex: 0 0 auto;  /* 가로로 배치 */
-        width: 45%;  /* 각 항목의 가로 너비를 설정 */
         margin-bottom: 5px;
     }
 
@@ -179,6 +182,13 @@ h1 {
         width: 100%;
         height: calc(100vh - 160px); /* 지도 크기 조정 */
         top: 0;
+    }
+
+    /* leaflet-routing-container, leaflet-bar, leaflet-control 숨기기 */
+    .leaflet-routing-container, 
+    .leaflet-bar, 
+    .leaflet-control {
+        display: none !important;
     }
 }
 
