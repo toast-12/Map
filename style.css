@@ -134,6 +134,30 @@ h1 {
         z-index: 20;
         padding: 15px;
         font-size: 12px;
+        display: flex;
+        justify-content: space-between;
+        max-height: 50vh;
+        flex-wrap: wrap;
+    }
+
+    #directionsList {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+        overflow-x: auto;
+        font-size: 12px;
+    }
+
+    #directionsList li {
+        padding: 8px;
+        white-space: nowrap;
+        flex: 0 0 auto;  /* 가로로 배치 */
+        width: 45%;  /* 각 항목의 가로 너비를 설정 */
+        margin-bottom: 5px;
     }
 
     input, button {
@@ -155,6 +179,22 @@ h1 {
         width: 100%;
         height: calc(100vh - 160px); /* 지도 크기 조정 */
         top: 0;
+    }
+}
+
+/* PC에서 폼 아래로 고정된 방향 안내 */
+@media (min-width: 769px) {
+    .directions-container {
+        position: relative;
+        bottom: auto;
+        max-height: 50vh;
+        display: block;
+    }
+
+    #directionsList li {
+        font-size: 14px;
+        padding: 8px 0;
+        border-bottom: 1px solid #eee;
     }
 }
 
