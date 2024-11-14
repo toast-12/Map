@@ -24,19 +24,16 @@ body {
 /* 폼 컨테이너 스타일링 */
 .form-container {
     position: absolute;
-    top: 20px;
-    left: 20px;
+    bottom: 0;  /* 폼을 화면 아래로 고정 */
+    left: 0;
     z-index: 10;
+    width: 100%;
     padding: 20px;
     background-color: rgba(255, 255, 255, 0.9);
-    border-radius: 15px;
+    border-radius: 15px 15px 0 0;  /* 상단에만 둥근 모서리 */
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease;
-    max-width: 300px;
-    width: 100%;
 }
 
-/* 입력 필드와 버튼 크기 */
 .input-container {
     display: flex;
     flex-direction: column;
@@ -84,7 +81,7 @@ h1 {
 /* 방향 안내 컨테이너 */
 .directions-container {
     position: absolute;
-    bottom: 20px;
+    bottom: 100px;  /* 폼 위에 표시 */
     right: 20px;
     z-index: 10;
     padding: 20px;
@@ -119,17 +116,17 @@ h1 {
 
     .form-container {
         position: fixed;
-        top: 10px;
-        left: 10px;
-        right: 10px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 20;
         max-width: 100%;
         padding: 15px;
-        z-index: 20;
     }
 
     .directions-container {
         position: fixed;
-        bottom: 10px;
+        bottom: 100px;
         left: 10px;
         right: 10px;
         max-width: 100%;
