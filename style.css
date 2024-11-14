@@ -1,4 +1,3 @@
-/* 기본 스타일 */
 * {
     margin: 0;
     padding: 0;
@@ -21,7 +20,6 @@ body {
     z-index: 0;
 }
 
-/* Form 컨테이너 */
 .form-container {
     position: absolute;
     top: 20px;
@@ -31,6 +29,7 @@ body {
     background-color: rgba(255, 255, 255, 0.9);
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
     max-width: 300px;
 }
 
@@ -39,13 +38,18 @@ body {
     flex-direction: column;
 }
 
-/* 버튼 및 입력 필드 스타일 */
 input, button {
     padding: 12px;
     margin: 8px 0;
     border-radius: 8px;
     border: 1px solid #ccc;
     font-size: 16px;
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+input:focus, button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 90, 235, 0.5);
 }
 
 button {
@@ -57,18 +61,38 @@ button {
     transition: background-color 0.2s ease;
 }
 
-/* 지도 하단 드로어 */
+button:hover {
+    background-color: #0046b8;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+h1 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
 .directions-container {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 20;
+    bottom: 20px;
+    right: 20px;
+    z-index: 10;
     padding: 20px;
     background-color: rgba(255, 255, 255, 0.9);
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    max-width: 300px;
+    max-height: 50vh;
+    overflow-y: auto;
     display: none;
+}
+
+.directions-container h2 {
+    margin-bottom: 10px;
 }
 
 .directions-list {
@@ -86,7 +110,6 @@ button {
     flex-shrink: 0;
 }
 
-/* 모바일 최적화 */
 @media (max-width: 768px) {
     .form-container {
         top: 10px;
@@ -102,8 +125,11 @@ button {
         max-width: none;
     }
 
-    .directions-list {
-        gap: 5px;
-        margin-bottom: 40px;
+    input, button {
+        font-size: 14px;
+    }
+
+    h1 {
+        font-size: 20px;
     }
 }
