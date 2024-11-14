@@ -1,4 +1,4 @@
-
+/* 기본 스타일링 */
 * {
     margin: 0;
     padding: 0;
@@ -21,6 +21,7 @@ body {
     z-index: 0;
 }
 
+/* 폼 컨테이너 스타일링 */
 .form-container {
     position: absolute;
     top: 20px;
@@ -32,20 +33,23 @@ body {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease;
     max-width: 300px;
+    width: 100%;
 }
 
+/* 입력 필드와 버튼 크기 */
 .input-container {
     display: flex;
     flex-direction: column;
 }
 
 input, button {
-    padding: 12px;
+    padding: 14px;
     margin: 8px 0;
     border-radius: 8px;
     border: 1px solid #ccc;
     font-size: 16px;
     transition: box-shadow 0.3s ease, transform 0.2s ease;
+    width: 100%;
 }
 
 input:focus, button:focus {
@@ -77,6 +81,7 @@ h1 {
     color: #333;
 }
 
+/* 방향 안내 컨테이너 */
 .directions-container {
     position: absolute;
     bottom: 20px;
@@ -106,78 +111,54 @@ h1 {
     font-size: 14px;
 }
 
-.leaflet-routing-container {
-    display: none;
-}
-
+/* 모바일 최적화 */
 @media (max-width: 768px) {
+    body {
+        font-size: 14px;
+    }
+
     .form-container {
+        position: fixed;
         top: 10px;
         left: 10px;
         right: 10px;
-        max-width: none;
+        max-width: 100%;
+        padding: 15px;
+        z-index: 20;
     }
 
     .directions-container {
+        position: fixed;
+        bottom: 10px;
         left: 10px;
         right: 10px;
-        bottom: 10px;
-        max-width: none;
+        max-width: 100%;
+        margin: 0;
+        z-index: 20;
+        padding: 15px;
+        font-size: 12px;
     }
 
     input, button {
-        font-size: 14px;
+        font-size: 16px;
+        padding: 16px;
+        width: 100%;
     }
 
     h1 {
         font-size: 20px;
+        margin-bottom: 15px;
     }
-}
 
-/* 방향 안내 컨테이너 스타일링 */
-.directions-container {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    margin: 10px;
-    padding: 15px;
-    max-width: 350px;
-    max-height: 70vh;
-    overflow-y: auto;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Malgun Gothic', sans-serif;
-}
+    #directionsList li {
+        padding: 8px 0;
+    }
 
-/* 방향 안내 리스트 스타일링 */
-#directionsList {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-#directionsList li {
-    padding: 10px 0;
-    border-bottom: 1px solid #eee;
-    line-height: 1.5;
-    font-size: 14px;
-    word-break: keep-all;
-    overflow-wrap: break-word;
-    /* 한글과 영문 텍스트 렌더링 최적화 */
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
-#directionsList li:last-child {
-    border-bottom: none;
-}
-
-/* 한글 텍스트 최적화 */
-.korean-text {
-    font-family: 'Malgun Gothic', -apple-system, sans-serif;
-}
-
-/* 영문 텍스트 최적화 */
-.english-text {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    #map {
+        width: 100%;
+        height: calc(100vh - 160px); /* 지도 크기 조정 */
+        top: 0;
+    }
 }
 
 /* 스크롤바 스타일링 */
@@ -197,17 +178,4 @@ h1 {
 
 .directions-container::-webkit-scrollbar-thumb:hover {
     background: #555;
-}
-
-/* 모바일 최적화 */
-@media (max-width: 768px) {
-    .directions-container {
-        max-width: calc(100% - 20px);
-        margin: 10px;
-        font-size: 13px;
-    }
-
-    #directionsList li {
-        padding: 8px 0;
-    }
 }
