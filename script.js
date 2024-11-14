@@ -46,6 +46,8 @@ function calculateRoute() {
     });
 }
 
+//WHAT
+
 function showDirections(steps) {
     const directionsList = document.getElementById('directionsList');
     directionsList.innerHTML = ''; // 기존 경로 목록 초기화
