@@ -12,21 +12,21 @@
     <div id="map"></div>
     
     <div class="form-container">
-        <div style="width: 100%; padding: 5px; margin: 5px;  background-color: rgb(255, 62, 62); color: white; border-radius: 10px;">현재 버전는 베타 버전으로, 불안정 할 수 있습니다.</div>
+        <div style="width: 100%; padding: 5px; margin: 5px; background-color: rgb(255, 62, 62); color: white; border-radius: 10px;">현재 버전은 베타 버전으로, 불안정 할 수 있습니다.</div>
         <h1>길찾기 앱</h1>
         <div class="input-container">
             <label for="start">출발지:</label>
             <input type="text" id="start" placeholder="출발지 입력">
             <label for="end">도착지:</label>
             <input type="text" id="end" placeholder="도착지 입력">
-            <button onclick="calculateRoute()">
+            <button id="findRoute">
                 <i class="fas fa-route"></i> 길찾기
             </button>
         </div>
         
         <div class="directions-container" id="directions">
             <h2>길 안내</h2>
-            <ul id="directionsList"></ul>
+            <div id="directionsList" class="directions-list"></div>
         </div>
     </div>
 
