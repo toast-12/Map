@@ -1,70 +1,88 @@
-// 지도 초기화
-var map = L.map('map').setView([37.5665, 126.978], 13); // 기본 서울 좌표로 설정
+// 기존 맵 관련 코드는 유지하고 아래 코드를 추가합니다
 
-// OpenStreetMap 타일 레이어 추가
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
+document.addEventListener('DOMContentLoaded', function() {
+    // 모바일 드래그 기능 초기화
+    initializeMobileDrawer();
+});
 
-// Geocoding (주소를 좌표로 변환) 위한 제어 추가
-var geocoder = L.Control.Geocoder.nominatim();
+function initializeMobileDrawer() {
+    const directionsWrapper = document.querySelector('.directions-wrapper');
+    const handle = document.querySelector('.mobile-handle');
+    let startY = 0;
+    let startTransform = 0;
+    let isDragging = false;
 
-// 경로를 계산할 때 사용할 Routing Control
-var control;
+    if (!directionsWrapper || !handle) return;
 
-// 지도에서 주소를 검색하고, 결과를 받아오기 위한 함수
-function geocodeAddress(address, callback) {
-    geocoder.geocode(address, function(results) {
-        if (results.length > 0) {
-            var latLng = results[0].center; // 첫 번째 결과의 중심 좌표
-            callback(latLng);
+    // 초기 상태 설정
+    directionsWrapper.classList.add('collapsed');
+
+    handle.addEventListener('touchstart', function(e) {
+        isDragging = true;
+        startY = e.touches[0].clientY;
+        startTransform = getTransformValue();
+        directionsWrapper.style.transition = 'none';
+    });
+
+    document.addEventListener('touchmove', function(e) {
+        if (!isDragging) return;
+
+        const deltaY = e.touches[0].clientY - startY;
+        const newTransform = Math.min(Math.max(startTransform + deltaY, 0), window.innerHeight - 50);
+        directionsWrapper.style.transform = `translateY(${newTransform}px)`;
+    });
+
+    document.addEventListener('touchend', function() {
+        if (!isDragging) return;
+        
+        isDragging = false;
+        directionsWrapper.style.transition = 'transform 0.3s ease-out';
+        
+        const currentTransform = getTransformValue();
+        if (currentTransform > window.innerHeight / 2) {
+            directionsWrapper.classList.add('collapsed');
         } else {
-            alert("주소를 찾을 수 없습니다.");
+            directionsWrapper.classList.remove('collapsed');
         }
     });
-}
 
-// 경로 계산 함수
-function calculateRoute() {
-    var start = document.getElementById('start').value; // 출발지
-    var end = document.getElementById('end').value; // 도착지
-
-    if (!start || !end) {
-        alert('출발지와 도착지를 모두 입력해주세요!');
-        return;
-    }
-
-    // 이전에 계산된 경로가 있으면 제거
-    if (control) {
-        map.removeControl(control);
-    }
-
-    // 출발지와 도착지를 좌표로 변환하여 경로를 계산
-    geocodeAddress(start, function(startLatLng) {
-        geocodeAddress(end, function(endLatLng) {
-            // 경로 계산 및 지도에 표시
-            control = L.Routing.control({
-                waypoints: [startLatLng, endLatLng],
-                routeWhileDragging: true, // 드래그 시 경로 업데이트
-                geocoder: L.Control.Geocoder.nominatim()
-            }).addTo(map);
-
-            // 경로 안내를 방향 리스트에 추가
-            control.on('routesfound', function(event) {
-                var routes = event.routes;
-                var directionsList = document.getElementById('directionsList');
-                directionsList.innerHTML = ''; // 기존 방향 리스트 초기화
-
-                // 경로의 각 단계들을 나열
-                routes[0].instructions.forEach(function(instruction) {
-                    var li = document.createElement('li');
-                    li.textContent = instruction.text;
-                    directionsList.appendChild(li);
-                });
-
-                // 방향 안내 박스 표시
-                document.getElementById('directions').style.display = 'block';
-            });
-        });
+    // 클릭으로도 토글 가능하게
+    handle.addEventListener('click', function() {
+        directionsWrapper.classList.toggle('collapsed');
     });
+
+    function getTransformValue() {
+        const transform = window.getComputedStyle(directionsWrapper).transform;
+        if (transform === 'none') return 0;
+        const matrix = new DOMMatrix(transform);
+        return matrix.m42; // Y 변환값 반환
+    }
 }
+
+// 경로 찾기 후 방향 컨테이너 표시
+function showDirections(routes) {
+    const directionsWrapper = document.querySelector('.directions-wrapper');
+    if (directionsWrapper) {
+        directionsWrapper.style.display = 'block';
+        if (window.innerWidth <= 768) {
+            // 모바일에서는 약간 올라온 상태로 표시
+            directionsWrapper.classList.remove('collapsed');
+            setTimeout(() => {
+                directionsWrapper.classList.add('collapsed');
+            }, 1000);
+        }
+    }
+}
+
+// 기존 calculateRoute 함수에서 경로를 찾은 후 호출
+routeControl.on('routesfound', function(e) {
+    const routes = e.routes[0].instructions;
+    const directionsList = document.getElementById('directionsList');
+    directionsList.innerHTML = '';
+    routes.forEach((step, index) => {
+        const li = document.createElement('li');
+        li.textContent = `${index + 1}. ${step.text}`;
+        directionsList.appendChild(li);
+    });
+    showDirections(routes);
+});
