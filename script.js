@@ -1,7 +1,16 @@
 // routeControl 변수 정의 및 초기화
 let routeControl;
+let map; // map 객체를 추가
 
 document.addEventListener('DOMContentLoaded', function() {
+    // 지도 객체 초기화
+    map = L.map('map').setView([57.74, 11.94], 13); // 지도 초기화
+
+    // 지도 타일 레이어 추가
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
     // 모바일 드래그 기능 초기화
     console.log('DOMContentLoaded 이벤트 발생');
     initializeMobileDrawer();
