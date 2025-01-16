@@ -102,3 +102,11 @@ routeControl.on('routesfound', function(e) {
     });
     showDirections(routes);
 });
+
+function calculateRoute() {
+    if (!routeControl) {
+        console.error('routeControl이 초기화되지 않았습니다.');
+        return;
+    }
+    // 경로 계산 로직 추가
+}
