@@ -1,7 +1,19 @@
+// routeControl 변수 정의 및 초기화
+let routeControl;
+
 document.addEventListener('DOMContentLoaded', function() {
     // 모바일 드래그 기능 초기화
     console.log('DOMContentLoaded 이벤트 발생');
     initializeMobileDrawer();
+
+    // routeControl 초기화
+    routeControl = L.Routing.control({
+        waypoints: [
+            L.latLng(57.74, 11.94),
+            L.latLng(57.6792, 11.949)
+        ],
+        routeWhileDragging: true
+    }).addTo(map);
 });
 
 function initializeMobileDrawer() {
