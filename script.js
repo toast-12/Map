@@ -1,7 +1,6 @@
-// 기존 맵 관련 코드는 유지하고 아래 코드를 추가합니다
-
 document.addEventListener('DOMContentLoaded', function() {
     // 모바일 드래그 기능 초기화
+    console.log('DOMContentLoaded 이벤트 발생');
     initializeMobileDrawer();
 });
 
@@ -12,12 +11,16 @@ function initializeMobileDrawer() {
     let startTransform = 0;
     let isDragging = false;
 
-    if (!directionsWrapper || !handle) return;
+    if (!directionsWrapper || !handle) {
+        console.log('directionsWrapper 또는 handle 요소를 찾을 수 없습니다.');
+        return;
+    }
 
     // 초기 상태 설정
     directionsWrapper.classList.add('collapsed');
 
     handle.addEventListener('touchstart', function(e) {
+        console.log('touchstart 이벤트 발생');
         isDragging = true;
         startY = e.touches[0].clientY;
         startTransform = getTransformValue();
@@ -52,6 +55,7 @@ function initializeMobileDrawer() {
     });
 
     function getTransformValue() {
+        console.log('getTransformValue 함수 호출');
         const transform = window.getComputedStyle(directionsWrapper).transform;
         if (transform === 'none') return 0;
         const matrix = new DOMMatrix(transform);
