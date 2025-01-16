@@ -118,4 +118,28 @@ function calculateRoute() {
         return;
     }
     // 경로 계산 로직 추가
+    const start = document.getElementById('start').value;
+    const end = document.getElementById('end').value;
+
+    if (!start || !end) {
+        console.error('출발지와 도착지를 입력하세요.');
+        return;
+    }
+
+    // Geocoding을 사용하여 주소를 좌표로 변환
+    L.Control.Geocoder.nominatim().geocode(start, function(results) {
+        if (results.length > 0) {
+            const startLatLng = results[0].center;
+            L.Control.Geocoder.nominatim().geocode(end, function(results) {
+                if (results.length > 0) {
+                    const endLatLng = results[0].center;
+                    routeControl.setWaypoints([startLatLng, endLatLng]);
+                } else {
+                    console.error('도착지 주소를 찾을 수 없습니다.');
+                }
+            });
+        } else {
+            console.error('출발지 주소를 찾을 수 없습니다.');
+        }
+    });
 }
