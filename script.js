@@ -2,6 +2,7 @@ let routeControl;
 let map;
 let geocodeCache = {}; // Geocoding 결과 캐시
 let timeout; // 디바운스용 타이머
+let userIsInKorea = false; // 사용자가 한국에 있는지 여부
 
 document.addEventListener('DOMContentLoaded', function() {
     // 지도 객체 초기화
@@ -23,7 +24,43 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 모바일 드래그 기능 초기화
     initializeMobileDrawer();
+
+    // 사용자의 IP가 한국에 있는지 확인 후 경로 계산을 허용할지 결정
+    checkUserIP();
 });
+
+// 사용자 IP 확인 함수
+function checkUserIP() {
+    fetch('https://ip-api.com/json/')
+        .then(response => response.json())
+        .then(data => {
+            if (data.country === "South Korea") {
+                console.log('사용자가 한국에 있습니다.');
+                userIsInKorea = true; // 사용자가 한국에 있는 경우
+            } else {
+                console.log('사용자가 한국에 있지 않습니다. 북한 경로 허용');
+                userIsInKorea = false; // 사용자가 한국이 아닌 경우
+            }
+        })
+        .catch(error => {
+            console.error('IP 확인 중 오류 발생:', error);
+            alert('IP 확인에 실패했습니다.');
+        });
+}
+
+// 북한 경계 정의
+const northKoreaBounds = {
+    latMin: 37.5,  // 최소 위도
+    latMax: 42.0,  // 최대 위도
+    lonMin: 124.5, // 최소 경도
+    lonMax: 131.0  // 최대 경도
+};
+
+// 좌표가 북한에 포함되는지 확인하는 함수
+function isInNorthKorea(lat, lon) {
+    return lat >= northKoreaBounds.latMin && lat <= northKoreaBounds.latMax &&
+           lon >= northKoreaBounds.lonMin && lon <= northKoreaBounds.lonMax;
+}
 
 function initializeMobileDrawer() {
     const directionsWrapper = document.querySelector('.directions-wrapper');
@@ -144,6 +181,16 @@ function calculateRoute() {
                     if (results.length > 0) {
                         const endLatLng = results[0].center;
                         geocodeCache[end] = endLatLng; // 캐시에 저장
+
+                        // 사용자가 한국에 있을 때만 북한 경로를 차단
+                        if (userIsInKorea) {
+                            if (isInNorthKorea(startLatLng.lat, startLatLng.lng) ||
+                                isInNorthKorea(endLatLng.lat, endLatLng.lng)) {
+                                alert("북한 경로는 한국에서 사용할 수 없습니다.");
+                                return; // 경로 계산을 중지
+                            }
+                        }
+
                         routeControl.setWaypoints([startLatLng, endLatLng]);
                     } else {
                         console.error('도착지 주소를 찾을 수 없습니다.');
