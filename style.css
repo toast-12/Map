@@ -6,62 +6,44 @@
 }
 
 body {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Arial', sans-serif;
     height: 100vh;
-    background: #f0f4f8;
     overflow: hidden;
+    background: linear-gradient(45deg, #4CAF50, #81C784);
 }
 
-/* 지도 스타일 */
 #map {
     width: 100%;
     height: 100%;
     position: absolute;
     top: 0;
     left: 0;
+    z-index: 0;
 }
 
-/* 폼 컨테이너 */
+/* 폼 컨테이너 스타일링 */
 .form-container {
     position: absolute;
-    bottom: 0;
+    bottom: 0;  /* 폼을 화면 아래로 고정 */
     left: 0;
+    z-index: 10;
     width: 100%;
     padding: 20px;
     background-color: rgba(255, 255, 255, 0.9);
-    border-radius: 20px 20px 0 0;
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-    z-index: 10;
+    border-radius: 15px 15px 0 0;  /* 상단에만 둥근 모서리 */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
-.warning {
-    background-color: #ff5733;
-    color: white;
-    padding: 8px;
-    border-radius: 5px;
-    font-size: 14px;
-    margin-bottom: 15px;
-}
-
-h1 {
-    text-align: center;
-    font-size: 28px;
-    color: #333;
-    margin-bottom: 15px;
-}
-
-/* 입력 폼 */
 .input-container {
     display: flex;
     flex-direction: column;
-    gap: 10px;
 }
 
 input, button {
-    padding: 12px;
+    padding: 14px;
     margin: 8px 0;
     border-radius: 8px;
-    border: 1px solid #ddd;
+    border: 1px solid #ccc;
     font-size: 16px;
     transition: box-shadow 0.3s ease, transform 0.2s ease;
     width: 100%;
@@ -69,38 +51,46 @@ input, button {
 
 input:focus, button:focus {
     outline: none;
-    box-shadow: 0 0 0 2px #4CAF50;
+    box-shadow: 0 0 0 2px rgba(0, 90, 235, 0.5);
 }
 
 button {
-    background: #4CAF50;
+    background: #005aeb;
     color: white;
-    font-weight: 500;
     cursor: pointer;
+    font-weight: bold;
     border: none;
     transition: background-color 0.2s ease;
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #0046b8;
 }
 
 button:active {
     transform: scale(0.98);
 }
 
+h1 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
 /* 방향 안내 컨테이너 */
 .directions-container {
     position: absolute;
-    bottom: 100px;
+    bottom: 100px;  /* 폼 위에 표시 */
     right: 20px;
-    background-color: rgba(255, 255, 255, 0.9);
-    border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    max-width: 300px;
+    z-index: 10;
     padding: 20px;
-    font-size: 14px;
-    z-index: 20;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    max-width: 300px;
+    max-height: 50vh;
+    overflow-y: auto;
     display: none;
 }
 
@@ -109,13 +99,17 @@ button:active {
 }
 
 #directionsList {
-    list-style: none;
+    list-style-type: none;
     padding: 0;
-    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 #directionsList li {
-    margin-bottom: 10px;
+    margin-bottom: 8px;
+    font-size: 14px;
+    white-space: nowrap;
 }
 
 /* 모바일 최적화 */
@@ -130,43 +124,98 @@ button:active {
         left: 0;
         right: 0;
         z-index: 20;
+        max-width: 100%;
         padding: 15px;
     }
 
     .directions-container {
         position: fixed;
-        bottom: 120px;
+        bottom: 100px;
         left: 10px;
         right: 10px;
-        font-size: 12px;
+        max-width: 100%;
+        margin: 0;
+        z-index: 20;
         padding: 15px;
-        display: block;
+        font-size: 12px;
+        display: flex;
+        justify-content: space-between;
+        max-height: 50vh;
+        flex-wrap: wrap;
+    }
+
+    #directionsList {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;  /* 왼쪽 정렬 */
+        width: 100%;
+        overflow-x: auto;
+        font-size: 12px;
+    }
+
+    #directionsList li {
+        padding: 8px;
+        white-space: nowrap;
+        flex: 0 0 auto;  /* 가로로 배치 */
+        margin-bottom: 5px;
     }
 
     input, button {
         font-size: 16px;
-        padding: 14px;
+        padding: 16px;
         width: 100%;
+    }
+
+    h1 {
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+
+    #directionsList li {
+        padding: 8px 0;
     }
 
     #map {
         width: 100%;
-        height: calc(100vh - 160px);
+        height: calc(100vh - 160px); /* 지도 크기 조정 */
+        top: 0;
+    }
+
+    /* leaflet-routing-container, leaflet-bar, leaflet-control 숨기기 */
+    .leaflet-routing-container, 
+    .leaflet-bar, 
+    .leaflet-control {
+        display: none !important;
     }
 }
 
-/* 지도에 Mapbox 스타일 적용 */
-#map {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+/* PC에서 폼 아래로 고정된 방향 안내 */
+@media (min-width: 769px) {
+    .directions-container {
+        position: relative;
+        bottom: auto;
+        max-height: 50vh;
+        display: block;
+    }
+
+    #directionsList li {
+        font-size: 14px;
+        padding: 8px 0;
+        border-bottom: 1px solid #eee;
+    }
 }
 
-/* 스크롤바 스타일 */
+/* 스크롤바 스타일링 */
 .directions-container::-webkit-scrollbar {
     width: 6px;
+}
+
+.directions-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
 }
 
 .directions-container::-webkit-scrollbar-thumb {
