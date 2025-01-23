@@ -1,19 +1,16 @@
-// routeControl 변수 정의 및 초기화
 let routeControl;
-let map; // map 객체를 추가
+let map;
+let geocodeCache = {}; // Geocoding 결과 캐시
+let timeout; // 디바운스용 타이머
 
 document.addEventListener('DOMContentLoaded', function() {
     // 지도 객체 초기화
-    map = L.map('map').setView([57.74, 11.94], 13); // 지도 초기화
+    map = L.map('map').setView([57.74, 11.94], 13);
 
     // 지도 타일 레이어 추가
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
-
-    // 모바일 드래그 기능 초기화
-    console.log('DOMContentLoaded 이벤트 발생');
-    initializeMobileDrawer();
 
     // routeControl 초기화
     routeControl = L.Routing.control({
@@ -23,6 +20,9 @@ document.addEventListener('DOMContentLoaded', function() {
         ],
         routeWhileDragging: true
     }).addTo(map);
+
+    // 모바일 드래그 기능 초기화
+    initializeMobileDrawer();
 });
 
 function initializeMobileDrawer() {
@@ -58,10 +58,10 @@ function initializeMobileDrawer() {
 
     document.addEventListener('touchend', function() {
         if (!isDragging) return;
-        
+
         isDragging = false;
         directionsWrapper.style.transition = 'transform 0.3s ease-out';
-        
+
         const currentTransform = getTransformValue();
         if (currentTransform > window.innerHeight / 2) {
             directionsWrapper.classList.add('collapsed');
@@ -84,7 +84,6 @@ function initializeMobileDrawer() {
     }
 }
 
-// 경로 찾기 후 방향 컨테이너 표시
 function showDirections(routes) {
     const directionsWrapper = document.querySelector('.directions-wrapper');
     if (directionsWrapper) {
@@ -99,7 +98,6 @@ function showDirections(routes) {
     }
 }
 
-// 기존 calculateRoute 함수에서 경로를 찾은 후 호출
 routeControl.on('routesfound', function(e) {
     const routes = e.routes[0].instructions;
     const directionsList = document.getElementById('directionsList');
@@ -112,12 +110,13 @@ routeControl.on('routesfound', function(e) {
     showDirections(routes);
 });
 
+// Geocoding 요청 최적화 (캐시 및 디바운스)
 function calculateRoute() {
     if (!routeControl) {
         console.error('routeControl이 초기화되지 않았습니다.');
         return;
     }
-    // 경로 계산 로직 추가
+
     const start = document.getElementById('start').value;
     const end = document.getElementById('end').value;
 
@@ -126,20 +125,39 @@ function calculateRoute() {
         return;
     }
 
-    // Geocoding을 사용하여 주소를 좌표로 변환
-    L.Control.Geocoder.nominatim().geocode(start, function(results) {
-        if (results.length > 0) {
-            const startLatLng = results[0].center;
-            L.Control.Geocoder.nominatim().geocode(end, function(results) {
-                if (results.length > 0) {
-                    const endLatLng = results[0].center;
-                    routeControl.setWaypoints([startLatLng, endLatLng]);
-                } else {
-                    console.error('도착지 주소를 찾을 수 없습니다.');
-                }
-            });
-        } else {
-            console.error('출발지 주소를 찾을 수 없습니다.');
-        }
-    });
+    // 캐시에서 시작지와 도착지 좌표를 확인
+    const cachedStart = geocodeCache[start];
+    const cachedEnd = geocodeCache[end];
+
+    if (cachedStart && cachedEnd) {
+        // 캐시된 좌표가 있으면 바로 경로 설정
+        routeControl.setWaypoints([cachedStart, cachedEnd]);
+    } else {
+        // 출발지 주소를 좌표로 변환
+        L.Control.Geocoder.nominatim().geocode(start, function(results) {
+            if (results.length > 0) {
+                const startLatLng = results[0].center;
+                geocodeCache[start] = startLatLng; // 캐시에 저장
+
+                // 도착지 주소를 좌표로 변환
+                L.Control.Geocoder.nominatim().geocode(end, function(results) {
+                    if (results.length > 0) {
+                        const endLatLng = results[0].center;
+                        geocodeCache[end] = endLatLng; // 캐시에 저장
+                        routeControl.setWaypoints([startLatLng, endLatLng]);
+                    } else {
+                        console.error('도착지 주소를 찾을 수 없습니다.');
+                    }
+                });
+            } else {
+                console.error('출발지 주소를 찾을 수 없습니다.');
+            }
+        });
+    }
+}
+
+// 디바운스 함수: 사용자가 입력을 마친 후 일정 시간이 지나면 경로 계산
+function debounceGeocode() {
+    clearTimeout(timeout);
+    timeout = setTimeout(calculateRoute, 500); // 500ms 후에 calculateRoute 호출
 }
