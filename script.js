@@ -41,7 +41,6 @@ function initializeMobileDrawer() {
     directionsWrapper.classList.add('collapsed');
 
     handle.addEventListener('touchstart', function(e) {
-        console.log('touchstart 이벤트 발생');
         isDragging = true;
         startY = e.touches[0].clientY;
         startTransform = getTransformValue();
@@ -76,7 +75,6 @@ function initializeMobileDrawer() {
     });
 
     function getTransformValue() {
-        console.log('getTransformValue 함수 호출');
         const transform = window.getComputedStyle(directionsWrapper).transform;
         if (transform === 'none') return 0;
         const matrix = new DOMMatrix(transform);

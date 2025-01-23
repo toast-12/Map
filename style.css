@@ -1,4 +1,4 @@
-/* 기본 스타일링 */
+*기본 스타일링 */
 * {
     margin: 0;
     padding: 0;
@@ -9,7 +9,8 @@ body {
     font-family: 'Arial', sans-serif;
     height: 100vh;
     overflow: hidden;
-    background: linear-gradient(45deg, #4CAF50, #81C784);
+    background-color: #121212; /* 어두운 배경 */
+    color: #ffffff; /* 흰색 텍스트 */
 }
 
 #map {
@@ -24,14 +25,14 @@ body {
 /* 폼 컨테이너 스타일링 */
 .form-container {
     position: absolute;
-    bottom: 0;  /* 폼을 화면 아래로 고정 */
+    bottom: 0;  
     left: 0;
     z-index: 10;
     width: 100%;
     padding: 20px;
-    background-color: rgba(255, 255, 255, 0.9);
-    border-radius: 15px 15px 0 0;  /* 상단에만 둥근 모서리 */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    background-color: rgba(30, 30, 30, 0.9); /* 반투명 어두운 배경 */
+    border-radius: 15px 15px 0 0;  
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .input-container {
@@ -43,10 +44,12 @@ input, button {
     padding: 14px;
     margin: 8px 0;
     border-radius: 8px;
-    border: 1px solid #ccc;
+    border: 1px solid #444; /* 어두운 테두리 */
     font-size: 16px;
     transition: box-shadow 0.3s ease, transform 0.2s ease;
     width: 100%;
+    background-color: #1e1e1e; /* 어두운 입력 필드 */
+    color: #ffffff; /* 흰색 텍스트 */
 }
 
 input:focus, button:focus {
@@ -55,7 +58,7 @@ input:focus, button:focus {
 }
 
 button {
-    background: #005aeb;
+    background: #005aeb; /* 버튼 배경 */
     color: white;
     cursor: pointer;
     font-weight: bold;
@@ -64,7 +67,7 @@ button {
 }
 
 button:hover {
-    background-color: #0046b8;
+    background-color: #0046b8; /* 버튼 호버 색상 */
 }
 
 button:active {
@@ -75,19 +78,19 @@ h1 {
     text-align: center;
     font-size: 24px;
     margin-bottom: 20px;
-    color: #333;
+    color: #ffffff; /* 흰색 텍스트 */
 }
 
 /* 방향 안내 컨테이너 */
 .directions-container {
     position: absolute;
-    bottom: 100px;  /* 폼 위에 표시 */
+    bottom: 100px;  
     right: 20px;
     z-index: 10;
     padding: 20px;
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(30, 30, 30, 0.9); /* 반투명 어두운 배경 */
     border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     max-width: 300px;
     max-height: 50vh;
     overflow-y: auto;
@@ -96,6 +99,7 @@ h1 {
 
 .directions-container h2 {
     margin-bottom: 10px;
+    color: #ffffff; /* 흰색 텍스트 */
 }
 
 #directionsList {
@@ -110,6 +114,7 @@ h1 {
     margin-bottom: 8px;
     font-size: 14px;
     white-space: nowrap;
+    color: #ffffff; /* 흰색 텍스트 */
 }
 
 /* 모바일 최적화 */
@@ -150,16 +155,17 @@ h1 {
         margin: 0;
         display: flex;
         flex-direction: row;
-        justify-content: flex-start;  /* 왼쪽 정렬 */
+        justify-content: flex-start;  
         width: 100%;
         overflow-x: auto;
         font-size: 12px;
+        color: #ffffff; /* 흰색 텍스트 */
     }
 
     #directionsList li {
         padding: 8px;
         white-space: nowrap;
-        flex: 0 0 auto;  /* 가로로 배치 */
+        flex: 0 0 auto;  
         margin-bottom: 5px;
     }
 
@@ -180,7 +186,7 @@ h1 {
 
     #map {
         width: 100%;
-        height: calc(100vh - 160px); /* 지도 크기 조정 */
+        height: calc(100vh - 160px); 
         top: 0;
     }
 
@@ -204,7 +210,7 @@ h1 {
     #directionsList li {
         font-size: 14px;
         padding: 8px 0;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid #444; /* 어두운 테두리 */
     }
 }
 
@@ -214,15 +220,15 @@ h1 {
 }
 
 .directions-container::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: #333; /* 어두운 스크롤바 트랙 */
     border-radius: 3px;
 }
 
 .directions-container::-webkit-scrollbar-thumb {
-    background: #888;
+    background: #888; /* 어두운 스크롤바 thumb */
     border-radius: 3px;
 }
 
 .directions-container::-webkit-scrollbar-thumb:hover {
-    background: #555;
+    background: #555; /* 스크롤바 thumb 호버 색상 */
 }
